@@ -36,3 +36,17 @@ npm run build
 You can preview the production build with `npm run preview`.
 
 > To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+
+### ssl 証明書を作成
+
+以下を実行して、証明書を出力してください。
+
+```shell
+openssl req -x509 -out certs/localhost.crt -keyout certs/localhost.key \
+  -newkey rsa:2048 -nodes -sha256 \
+  -subj '/CN=localhost' -extensions EXT -days 3650 -config <( \
+   printf "[dn]\nCN=localhost\n[req]\ndistinguished_name = dn\n[EXT]\nsubjectAltName=DNS:localhost\nkeyUsage=digitalSignature\nextendedKeyUsage=serverAuth")
+```
+
+- `localhost.key`と`localhost.crt`を`certs`においてください。
+- `certs/localhost.crt` をキーチェーンで登録して信頼してください。
